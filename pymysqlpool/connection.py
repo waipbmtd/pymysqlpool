@@ -148,7 +148,6 @@ class MySQLConnectionPool(object):
     def connection(self, autocommit=False):
         conn = self.borrow_connection()
         assert isinstance(conn, Connection)
-        old_value = conn.get_autocommit()
         conn.autocommit(autocommit)
         try:
             yield conn
@@ -156,7 +155,7 @@ class MySQLConnectionPool(object):
             # logger.error(err, exc_info=True)
             raise err
         finally:
-            conn.autocommit(old_value)
+            conn.autocommit(False)
             self.return_connection(conn)
 
     def connect(self):
