@@ -127,12 +127,12 @@ class MySQLConnectionPool(object):
                                                                    self.free_size)
 
     @contextlib.contextmanager
-    def cursor(self, cursor=None):
+    def cursor(self, cursor=None, autocommit=True):
         """Shortcut to get a cursor object from a free connection.
         It's not that efficient to get cursor object in this way for
         too many times.
         """
-        with self.connection(autocommit=True) as conn:
+        with self.connection(autocommit) as conn:
             assert isinstance(conn, Connection)
             cursor = conn.cursor(cursor)
 
