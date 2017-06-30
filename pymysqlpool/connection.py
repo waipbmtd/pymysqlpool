@@ -127,12 +127,12 @@ class MySQLConnectionPool(object):
                                                                    self.free_size)
 
     @contextlib.contextmanager
-    def cursor(self, cursor=None, autocommit=True):
+    def cursor(self, cursor=None):
         """Shortcut to get a cursor object from a free connection.
         It's not that efficient to get cursor object in this way for
         too many times.
         """
-        with self.connection(autocommit) as conn:
+        with self.connection(True) as conn:
             assert isinstance(conn, Connection)
             cursor = conn.cursor(cursor)
 
@@ -148,6 +148,7 @@ class MySQLConnectionPool(object):
     def connection(self, autocommit=False):
         conn = self.borrow_connection()
         assert isinstance(conn, Connection)
+        old_value = conn.get_autocommit()
         conn.autocommit(autocommit)
         try:
             yield conn
@@ -155,7 +156,7 @@ class MySQLConnectionPool(object):
             # logger.error(err, exc_info=True)
             raise err
         finally:
-            conn.autocommit(False)
+            conn.autocommit(old_value)
             self.return_connection(conn)
 
     def connect(self):
