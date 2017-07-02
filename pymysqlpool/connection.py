@@ -37,7 +37,7 @@ class MySQLConnectionPool(object):
     """
 
     def __init__(self, pool_name, host=None, user=None, password="", database=None, port=3306,
-                 charset='utf8', use_dict_cursor=True, max_pool_size=16,
+                 charset='utf8', use_dict_cursor=True, max_pool_size=30,
                  enable_auto_resize=True, auto_resize_scale=1.5,
                  pool_resize_boundary=48,
                  defer_connect_pool=False, **kwargs):
