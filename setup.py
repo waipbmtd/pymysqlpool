@@ -1,13 +1,21 @@
-from distutils.core import setup
+import os
+from setuptools import setup, find_packages
+
+
+def read(fname):
+    try:
+        return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    except IOError:
+        return ''
 
 setup(
-    name='pymysqlpool',
+    name='pymysqlpool-dd',
     version='0.1',
-    packages=['pymysqlpool'],
+    packages=find_packages(),
     url='',
     license='MIT',
     author='Christopher Lee',
     author_email='',
-    requires=['pymysql', 'pandas'],
-    description='MySQL connection pool utility.'
+    requires=['pymysql'],
+    description='MySQL connection pool utility.',
 )
