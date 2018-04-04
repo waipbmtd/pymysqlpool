@@ -12,10 +12,10 @@ setup(
     name='pymysqlpool-dd',
     version='0.1',
     packages=find_packages(),
-    url='',
+    url='https://github.com/waipbmtd/pymysqlpool',
     license='MIT',
-    author='Christopher Lee',
-    author_email='',
+    author='Devin',
+    author_email='waipbmtd@gmail.com',
     requires=['pymysql'],
     description='MySQL connection pool utility.',
 )
