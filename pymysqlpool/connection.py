@@ -183,6 +183,7 @@ class MySQLConnectionPool(object):
     def close(self):
         """Close this connection pool"""
         try:
+            import logging
             logger.info('[{}] Close connection pool'.format(self))
         except Exception:
             pass
@@ -196,22 +197,20 @@ class MySQLConnectionPool(object):
         with self.__safe_lock:
             self.__is_killed = True
 
-    def borrow_connection(self):
+    def borrow_connection(self, block=True, time_out=60):
         """
         Get a free connection item from current pool. It's a little confused here, but it works as expected now.
         """
-        block = False
-
         while True:
-            conn = self._borrow(block)
+            conn = self._borrow(block, time_out)
             if conn is None:
                 block = not self._adjust_connection_pool()
             else:
                 return conn
 
-    def _borrow(self, block):
+    def _borrow(self, block=False, time_out=None):
         try:
-            connection = self._pool_container.get(block, None)
+            connection = self._pool_container.get(block, time_out)
         except PoolIsEmptyException:
             return None
         else:
